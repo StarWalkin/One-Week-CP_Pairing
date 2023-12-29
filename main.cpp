@@ -312,13 +312,99 @@ int main() {
 //    }
 
     //pairing
-    pairing(participants, boy_hetero, girl_hetero, attr_matrix, pairing_matrix, 1);
+    int *cnt1 = pairing(participants, boy_hetero, girl_hetero, attr_matrix, pairing_matrix, 0.5);
 
     //接下来处理同性恋的情况
     //男同随机均分成两组
     vector<int> boy_homo1;
-    
+    vector<int> boy_homo2;
+    randomSplit(boy_homo, boy_homo1, boy_homo2);
+    //print boy_homo1 and boy_homo2
+    for(int num:boy_homo1){
+        cout << num << " ";
+    }
+    cout << endl;
+    for(int num:boy_homo2){
+        cout << num << " ";
+    }
+    cout << endl;
 
+    int *cnt2 = pairing(participants, boy_homo1, boy_homo2, attr_matrix, pairing_matrix, 0.3);
+
+
+    //女同做一样的处理
+    vector<int> girl_homo1;
+    vector<int> girl_homo2;
+    randomSplit(girl_homo, girl_homo1, girl_homo2);
+    //print boy_homo1 and boy_homo2
+    for(int num:girl_homo1){
+        cout << num << " ";
+    }
+    cout << endl;
+    for(int num:girl_homo2){
+        cout << num << " ";
+    }
+    cout << endl;
+
+    int *cnt3 = pairing(participants, girl_homo1, girl_homo2, attr_matrix, pairing_matrix, 0.3);
+
+    int generation = 10;
+    double score;
+    //evolution
+    double max_score = -100;
+    for(int gen = 0; gen<generation; gen++){
+        //先保存一下四个向量的拷贝
+        vector<int> prev_boy_homo1 = boy_homo1;
+        vector<int> prev_boy_homo2 = boy_homo2;
+        vector<int> prev_girl_homo1 = girl_homo1;
+        vector<int> prev_girl_homo2 = girl_homo2;
+
+
+        cross(boy_homo1,boy_homo2,girl_homo1,girl_homo2);
+        cnt2 = pairing(participants, boy_homo1, boy_homo2, attr_matrix, pairing_matrix, 0.3);
+        cnt3 = pairing(participants, girl_homo1, girl_homo2, attr_matrix, pairing_matrix, 0.3);
+        int nice_matching_cnt = cnt1[1] + cnt2[1] + cnt3[1];
+        double nice_matching_rate = 1.00*nice_matching_cnt/(cnt1[2]+cnt2[2]+cnt3[2]);
+        int paired_count = cnt1[0] + cnt2[0] + cnt3[0];
+        double paired_rate = 1.00*paired_count/overall_num;
+
+        double curr_score = 0.5*paired_rate + 0.5*nice_matching_rate;
+        if(curr_score <= max_score){
+            boy_homo1 = prev_boy_homo1;
+            boy_homo2 = prev_boy_homo2;
+            girl_homo1 = prev_girl_homo1;
+            girl_homo2 = prev_girl_homo2;
+            cout << "prev:" << max_score << endl;
+            cout << "new:" << curr_score << endl;
+            cout << "进化变差" << endl;
+
+        }
+        else {
+            cout << "prev:" << max_score << endl;
+            cout << "new:" << curr_score << endl;
+            score = curr_score;
+            max_score = curr_score;
+            cout << "进化变优" <<endl;
+
+        }
+    }
+    int nice_matching_cnt = cnt1[1] + cnt2[1] + cnt3[1];
+    double nice_matching_rate = 1.00*nice_matching_cnt/(cnt1[2]+cnt2[2]+cnt3[2]);
+    int paired_count = cnt1[0] + cnt2[0] + cnt3[0];
+    double paired_rate = 1.00*paired_count/overall_num;
+
+    score = 0.5*paired_rate + 0.5*nice_matching_rate;
+    //print the rates and score
+    cout << "paired:" << paired_count << " " << paired_rate << endl;
+    cout << "nice matching" << nice_matching_rate << endl;
+    cout << "score:" << score << endl;
+
+    //检查一下匹配的组合中有没有不合理的
+
+
+
+
+    //释放动态内存
     return 0;
 }
 

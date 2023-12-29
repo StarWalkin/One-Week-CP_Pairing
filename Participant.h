@@ -37,6 +37,8 @@ struct Participant {
     int expect_major;
 
     int has_received = -1;
+    bool has_been_received = false;
+    bool nice_matching = false;
 
     vector<int> expect_height;
     vector<int> expect_weight;

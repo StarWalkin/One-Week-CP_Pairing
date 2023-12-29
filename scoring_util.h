@@ -23,6 +23,7 @@ double hobbies_scoring(Participant p1, Participant p2);
 double characteristics_scoring(Participant p1, Participant p2);
 //double hometown_scoring(Participant p1, Participant p2);
 
+double pairs_scoring(double **attr_matrix, int **pairing_matrix, int overall_num);
 #define SCORING_UTIL_H
 
 #endif //JSONL_TEST_SCORING_UTIL_H
