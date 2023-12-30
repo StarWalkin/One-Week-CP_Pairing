@@ -112,10 +112,10 @@ int main() {
             participants.push_back(curr_part);
 
             // 输出一些数据以验证
-            cout << "Participant " << data_counter << ":" << endl;
-            cout << "Age: " << curr_part.age << endl;
-            cout << "Gender: " << curr_part.gender << endl;
-            cout << "mbti: " << curr_part.mbti << endl;
+//            cout << "Participant " << data_counter << ":" << endl;
+//            cout << "Age: " << curr_part.age << endl;
+//            cout << "Gender: " << curr_part.gender << endl;
+//            cout << "mbti: " << curr_part.mbti << endl;
 //            for (const auto& score : curr_part.significance_score) {
 //                cout << score << " ";
 //            }
@@ -312,7 +312,7 @@ int main() {
 //    }
 
     //pairing
-    int *cnt1 = pairing(participants, boy_hetero, girl_hetero, attr_matrix, pairing_matrix, 0.5);
+    int *cnt1 = pairing(participants, boy_hetero, girl_hetero, attr_matrix, 1);
 
     //接下来处理同性恋的情况
     //男同随机均分成两组
@@ -329,7 +329,7 @@ int main() {
     }
     cout << endl;
 
-    int *cnt2 = pairing(participants, boy_homo1, boy_homo2, attr_matrix, pairing_matrix, 0.3);
+    int *cnt2 = pairing(participants, boy_homo1, boy_homo2, attr_matrix, 0.5);
 
 
     //女同做一样的处理
@@ -346,9 +346,9 @@ int main() {
     }
     cout << endl;
 
-    int *cnt3 = pairing(participants, girl_homo1, girl_homo2, attr_matrix, pairing_matrix, 0.3);
+    int *cnt3 = pairing(participants, girl_homo1, girl_homo2, attr_matrix, 0.5);
 
-    int generation = 10;
+    int generation = 100;
     double score;
     //evolution
     double max_score = -100;
@@ -361,8 +361,8 @@ int main() {
 
 
         cross(boy_homo1,boy_homo2,girl_homo1,girl_homo2);
-        cnt2 = pairing(participants, boy_homo1, boy_homo2, attr_matrix, pairing_matrix, 0.3);
-        cnt3 = pairing(participants, girl_homo1, girl_homo2, attr_matrix, pairing_matrix, 0.3);
+        cnt2 = pairing(participants, boy_homo1, boy_homo2, attr_matrix, -100);
+        cnt3 = pairing(participants, girl_homo1, girl_homo2, attr_matrix, -100);
         int nice_matching_cnt = cnt1[1] + cnt2[1] + cnt3[1];
         double nice_matching_rate = 1.00*nice_matching_cnt/(cnt1[2]+cnt2[2]+cnt3[2]);
         int paired_count = cnt1[0] + cnt2[0] + cnt3[0];
@@ -392,13 +392,19 @@ int main() {
     double nice_matching_rate = 1.00*nice_matching_cnt/(cnt1[2]+cnt2[2]+cnt3[2]);
     int paired_count = cnt1[0] + cnt2[0] + cnt3[0];
     double paired_rate = 1.00*paired_count/overall_num;
-
-    score = 0.5*paired_rate + 0.5*nice_matching_rate;
+    double net_paired_rate = 1.00*paired_count/(2*(cnt1[2]+cnt2[2]+cnt3[2]));
+    score = 0.25*paired_rate + 0.25*net_paired_rate + 0.5*nice_matching_rate;
     //print the rates and score
+    cout << "----------------results----------------" << endl;
+    cout << cnt1[2] << " " << cnt2[2] << " " << cnt3[2] << endl;
     cout << "paired:" << paired_count << " " << paired_rate << endl;
+    cout << "net_paired:" << net_paired_rate << endl;
     cout << "nice matching" << nice_matching_rate << endl;
     cout << "score:" << score << endl;
 
+
+    cout <<"attraction平均值：" << calculateAverage(attr_matrix,400,400) << endl;
+    cout <<"attraction中位数：" << calculateMedian(attr_matrix,400,400) << endl;
     //检查一下匹配的组合中有没有不合理的
 
 
@@ -407,63 +413,5 @@ int main() {
     //释放动态内存
     return 0;
 }
-
-
-
-
-
-
-//
-//    struct participant {
-//        string name;
-//
-//        int gender;
-//
-//        //学校
-//        int school;
-//        //校区
-//        int campus;
-//        //期待对方的学校和校区
-//        int expect_school;
-//
-//        int grade;
-//        int expect_grade_low;
-//        int expect_grade_high;
-//
-//        int age;
-//        int expect_age_low;
-//        int expect_age_high;
-//
-//        int height;
-//        int expect_height_low;
-//        int expect_height_high;
-//
-//        int weight;
-//        int *hobbies;
-//        string MBTI;
-//        string expect_MBTI;
-//        string major;
-//        string expect_major;
-//        int appearance;
-//        int expect_apperance_low;
-//        int expect_apperance_high;
-//
-//        int significance_rate[10];
-//    };
-//
-//    int n;
-//    participant *participants;
-//    vector<int> male_idx;
-//    vector<int> female_idx;
-//
-//    void information_parsing();
-//
-//    //preprocess: divide the data to male and female
-//    for (int i = 0;i < n;i ++){
-//        participant p = participants[i];
-//        if (p.gender == 0)  female_idx.push_back(i);
-//        if (p.gender == 1)  male_idx.push_back(i);
-//    }
-
 
 

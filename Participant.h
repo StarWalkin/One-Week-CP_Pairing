@@ -38,7 +38,11 @@ struct Participant {
 
     int has_received = -1;
     bool has_been_received = false;
+    int paired = -1;
+    vector<int> proposers_to_select;
     bool nice_matching = false;
+
+
 
     vector<int> expect_height;
     vector<int> expect_weight;

@@ -8,6 +8,6 @@ add_executable(jsonl_test main.cpp
         scoring_util.cpp
         Participant.h
         util.h
-        util.cpp)
+        util2.cpp)
 target_link_libraries(jsonl_test PRIVATE nlohmann_json::nlohmann_json)
 
