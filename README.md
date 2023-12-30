@@ -1,4 +1,4 @@
-<img width="485" alt="Screenshot 2023-12-30 at 16 59 14" src="https://github.com/StarWalkin/One-week-CP_Pairing/assets/135338285/a972c279-eefc-440e-bb25-d0a9ed443161"># One-week-CP_Pairing
+# One-week-CP_Pairing
 
 这是2023-2024-1 SJTU CS2309“问题求解与实践”的课程项目2（自选主题项目）
 ### Table of contents
@@ -106,7 +106,7 @@
 
 为了消除不同参与者重要性指数打分习惯不同对吸引度计算的印象，对所得的分值再除以重要度向量的L2范数进行标准化。公式如下：
 
-<img src="./figs/scoring.png" style="zoom: 25%;" />
+<img width="485" alt="Screenshot 2023-12-30 at 16 59 14" src="https://github.com/StarWalkin/One-week-CP_Pairing/assets/135338285/a972c279-eefc-440e-bb25-d0a9ed443161">
 
 注意到由于每个人各有自己特征和理想型特征，所以一般情况下A对B的吸引力不等于B对A的吸引力，即吸引力矩阵是非对称矩阵。
 
@@ -146,8 +146,9 @@
 **2. 净匹配成功率（net success rate)**：匹配成功的参与者占至多匹配成功人数（剔除因男女不均衡导致一定不能配对成功的人数）的比例
 **3. 优选率(nice matching rate)**：若成功配对的receiver是proposer的前30%的选择，则记为此proposer为优选，优选率为优选的proposer占至多成功匹配proposer（剔除因男女不均衡导致一定不能配对成功的人数）的比例。
 
-最后得到一个匹配的总体打分
-$pairing\_score = 0.25*success\_rate + 0.25*net\_success\_rate + 0.5*nice\_matching\_rate$
+最后得到一个匹配的总体打分:
+
+<img src="./figs/pairing_metric.png" style="zoom: 25%;" />
 
 ### 实验
 
@@ -166,6 +167,8 @@ $pairing\_score = 0.25*success\_rate + 0.25*net\_success\_rate + 0.5*nice\_match
 <p align="center">实验1结果fltk可视化</p>
 
 可见算法针对不同情况有良好的效果和鲁棒性。
+
+同时，**由于本项目核心算法以C++实现，运算效率很高**，能在10s内完成所有配对和演化运算。
 
 #### 2.改变阈值
 
