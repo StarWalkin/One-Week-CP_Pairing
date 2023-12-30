@@ -117,7 +117,7 @@
 打分后，依据性别和性取向将参与者分为男异性恋、女异性恋、男同性恋、女同性恋四组。
 
 **（3）算法主体：稳定匹配**
-以异性恋为例。若男多于女，则男为proposer竞争女参与者。**利用二分图稳定匹配的Gale-Shapley算法的变体进行匹配**。未配对的proposer一轮轮地向receiver表白，若receiver未配对且proposer对其有足够吸引力，则结束；若已配对，比较现在配对对象如收到表白的吸引力大小来确定是否更改匹配对象。
+以异性恋为例。若男多于女，则男为proposer竞争女参与者。**利用二分图稳定匹配的Gale-Shapley算法的变体进行匹配**。未配对的proposer一轮轮地向receiver表白，若receiver未配对且proposer对其有足够吸引力，则接受；若已配对，比较现在配对对象如收到表白的吸引力大小来确定是否更改匹配对象。
 
 与经典的GS算法的差异在于
 
@@ -143,12 +143,14 @@
 本算法从三个角度衡量匹配策略的效果
 
 **1. 匹配成功率(success rate)**：匹配成功的参与者占所有参与者比例
+
 **2. 净匹配成功率（net success rate)**：匹配成功的参与者占至多匹配成功人数（剔除因男女不均衡导致一定不能配对成功的人数）的比例
+
 **3. 优选率(nice matching rate)**：若成功配对的receiver是proposer的前30%的选择，则记为此proposer为优选，优选率为优选的proposer占至多成功匹配proposer（剔除因男女不均衡导致一定不能配对成功的人数）的比例。
 
 最后得到一个匹配的总体打分:
 
-<img src="./figs/pairing_metric.png" style="zoom: 25%;" />
+<img src="./figs/metric.png" style="zoom: 25%;" />
 
 ### 实验
 
