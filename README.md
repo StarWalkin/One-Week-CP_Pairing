@@ -66,7 +66,8 @@
 - **策略有效性**: 本项目中核心算法策略为二分图稳定匹配的Gale-Shapley算法，同时针对男女人数不平衡，同性恋参与者，参与者对某些指标的硬性要求，部分组合匹配度过低等情况添加了**分组配对、设定阈值、一票否决等策略机制**，在3组特征多元的测试集上，在 **“配对成功率”** ，**”净配对成功率“** **“优选率”** 三项指标上取得了良好的效果。同时对改进的Gale-Shapley算法进行理论分析，确保配对合理性和收敛性。
 - **算法鲁棒性**: 同时通过对核心配对方法进行封装，对吸引力**分值正则化**，允许灵活调整分组模式、阈值与演化代数等方式，减小了不同参与者特征分布，打分偏好等对配对准确性的影响，增强程序的灵活性。项目发布之前生成多组测试集进行**算法测试、结果可视化和消融实验**，有效地验证了算法的鲁棒性。
 - **场景实用性**:本项目基于**2023年11月、12月**公众号“交大十点物语”开展的两次高热度、高关注度的三日情侣/一周情侣活动，与活动主办方、算法负责人进行沟通与探讨，广泛吸收**两次活动中上海交大，华东师范大学一千余名活动参与者的反馈信息和校园论坛上的相关讨论意见**，完成算法的设计与实现，源于实践，解决真实的问题。
-  <img src="./figs/participants.jpg" style="zoom: 25%;" />
+
+<img src="./figs/participants.jpg" style="zoom: 25%;" />
 
 <p align="center">配对策略在多组数据集上的评测得分</p>
 
@@ -124,17 +125,24 @@
 1. 这里可以认为每个proposer都在receiver的list中，但是我在配对函数里设定了一定的阈值，彼此之间吸引力高于阈值才会配对成功。这样避免了匹配度过低的情况出现，提升了配对双方满意度。
 2. 这里允许proposer人数大于receiver的情况的出现。在这种情况下，proposer会轮番表白直至每个proposer或配对完成，或对所有receiver都表白过一遍后再退出循环
 
-<img src="./figs/GS.png" style="zoom: 25%;" />
+<p align="center">
+  <img src="./figs/GS.png" alt="Participants" style="height: 500px; width: auto;"/>
+</p>
 
 <p align="center">Gale Shaplay算法图示</p>
 
 对于同性恋，将男同/女同参与者均等分成两组（如果总数为奇数，则人数差1），然后执行上述算法。注意到GS算法是不对称的，稳定匹配是不唯一的，不同的分组方式可能影响结果，因此我采用**遗传算法**对分组方式进行进化与迭代，变异方式为染色体交叉，每次进化时随机选择一个操作数，或两组男同中交换一个元素，或两组女同交换一个元素，或上述二者均执行，然后重新配对，计算评价指标，保留更优解。在进化五十代后，算法稳定收敛，得到进化后的较优解。
 
-<img src="./figs/algo2.png" style="zoom: 25%;" />
+<p align="center">
+  <img src="./figs/algo2.png" alt="Participants" style="height: 500px; width: auto;"/>
+</p>
 
 <p align="center">遗传进化方法图示</p>
 
-<img src="./figs/evolution.jpg" style="zoom: 25%;" />
+
+<p align="center">
+  <img src="./figs/evolution.jpg" alt="Participants" style="height: 500px; width: auto;"/>
+</p>
 
 <p align="center">进化代数与配对得分</p>
 
@@ -158,7 +166,7 @@
 
 生成如下的三组数据：
 
-<img src="./figs/setting1.png" style="zoom: 25%;" />
+<p align="center"><img src="./figs/setting1.png" style="zoom: 25%;" /></p>
 
 <p align="center">实验1setting</p>
 
@@ -176,7 +184,9 @@
 
 基于实验1中第一组数据（更符合交大—华师活动性别分布实况），进行改变阈值的分析，设定如下：
 
+<p align="center">
 <img src="./figs/setting2.png" style="zoom: 25%;" />
+</p>
 
 <p align="center">实验2setting</p>
 
@@ -184,12 +194,16 @@
 
 <img src="./figs/threshold.jpg" style="zoom: 25%;" />
 
+<p align="center">
 <p align="center">实验2结果fltk可视化</p>
+</p>
 
 取消阈值（即设为-100）的消融实验中，净配对率100%，优选率低，随着阈值的提高，配对率和净配对率降低，优选率提高，这与intuition非常吻合。
 
 ### 致谢
 
-以上就是我项目2的主要内容，感谢交大十点物语主办活动和各位参与者、建言者给本项目的启发；感谢活动的算法负责人HZX与我的分享与探讨。
+以上就是我项目2的主要内容，由于时间、精力和工具的限制，我没有完全实现我的想法，比如基于AI打分的颜值检验等。
+
+感谢交大十点物语主办活动和各位参与者、建言者给本项目的启发；感谢活动的算法负责人HZX与我的分享与探讨。
 
 感谢老师和助教的耐心审阅，以及一学期以来的陪伴和教诲。祝新年快乐，万事胜意！（也祝自己2024pairing success doge)
