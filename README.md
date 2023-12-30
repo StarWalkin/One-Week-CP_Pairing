@@ -1,4 +1,4 @@
-# One-week-CP_Pairing
+<img width="485" alt="Screenshot 2023-12-30 at 16 59 14" src="https://github.com/StarWalkin/One-week-CP_Pairing/assets/135338285/a972c279-eefc-440e-bb25-d0a9ed443161"># One-week-CP_Pairing
 
 这是2023-2024-1 SJTU CS2309“问题求解与实践”的课程项目2（自选主题项目）
 ### Table of contents
@@ -106,17 +106,13 @@
 
 为了消除不同参与者重要性指数打分习惯不同对吸引度计算的印象，对所得的分值再除以重要度向量的L2范数进行标准化。公式如下：
 
-![Attractiveness](https://latex.codecogs.com/png.latex?\dpi{300}&space;\bg_white&space;\small&space;Attractiveness&space;=&space;\sum^{11}_{i=0}&space;\frac{significance\_score[i]/10&space;\cdot&space;score\_i}{\|&space;\text{{significance\_score}}&space;\|_2})
-
-
-
-
+<img src="./figs/scoring.png" style="zoom: 25%;" />
 
 注意到由于每个人各有自己特征和理想型特征，所以一般情况下A对B的吸引力不等于B对A的吸引力，即吸引力矩阵是非对称矩阵。
+
 <img src="./figs/scoring_items.png" style="zoom: 25%;" />
 
 <p align="center">打分细则</p>
-
 
 打分后，依据性别和性取向将参与者分为男异性恋、女异性恋、男同性恋、女同性恋四组。
 
