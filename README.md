@@ -1,6 +1,14 @@
 # One-week-CP_Pairing
 
 这是2023-2024-1 SJTU CS2309“问题求解与实践”的课程项目2（自选主题项目）
+### Table of contents
+
+- [序言](#序言)
+- [项目简介](#项目简介)
+- [问题描述与技术路线](#问题描述与技术路线)
+- [实验](#实验)
+- [致谢](#致谢)
+
 
 ### 序言
 
@@ -60,9 +68,10 @@
 - **场景实用性**:本项目基于**2023年11月、12月**公众号“交大十点物语”开展的两次高热度、高关注度的三日情侣/一周情侣活动，与活动主办方、算法负责人进行沟通与探讨，广泛吸收**两次活动中上海交大，华东师范大学一千余名活动参与者的反馈信息和校园论坛上的相关讨论意见**，完成算法的设计与实现，源于实践，解决真实的问题。
   <img src="./figs/participants.jpg" style="zoom: 25%;" />
 
-<center>配对策略在多组数据集上的评测得分</center>
+<p align="center">配对策略在多组数据集上的评测得分</p>
 
-### 问题描述
+
+### 问题描述与技术路线
 
 #### 问题背景：
 
@@ -85,9 +94,9 @@
 ##### 2.配对算法开发
 
 该部分总体算法流程如图所示
-<img src="./figs/algo1" style="zoom: 25%;" />
+<img src="./figs/algo1.png" style="zoom: 25%;" />
 
-<center>算法流程框架图</center>
+<p align="center">算法流程框架图</p>
 
 **（1）数据读取** ：作为**C++库编程**的实践。安装并调用**外部库nlohmann_json**来读取以jsonl格式存储的数据构造过程中生成的每个人的数据，在C++程序中以Participant类的形式存储。
 
@@ -97,14 +106,16 @@
 
 为了消除不同参与者重要性指数打分习惯不同对吸引度计算的印象，对所得的分值再除以重要度向量的L2范数进行标准化。公式如下：
 
-$Attractiveness = \displaystyle \sum^{11}_{i = 0}{\frac{significance\_score[i]/10*(score\_i)}{\| \text{{significance\_score} \|_2}}$
+![Attractiveness](https://latex.codecogs.com/png.latex?\dpi{300}&space;\bg_white&space;\small&space;Attractiveness&space;=&space;\sum^{11}_{i=0}&space;\frac{significance\_score[i]/10&space;\cdot&space;score\_i}{\|&space;\text{{significance\_score}}&space;\|_2})
+
+
 
 
 
 注意到由于每个人各有自己特征和理想型特征，所以一般情况下A对B的吸引力不等于B对A的吸引力，即吸引力矩阵是非对称矩阵。
-<img src="./figs/scoring_items" style="zoom: 25%;" />
+<img src="./figs/scoring_items.png" style="zoom: 25%;" />
 
-<center>打分细则</center>
+<p align="center">打分细则</p>
 
 
 打分后，依据性别和性取向将参与者分为男异性恋、女异性恋、男同性恋、女同性恋四组。
@@ -116,27 +127,28 @@ $Attractiveness = \displaystyle \sum^{11}_{i = 0}{\frac{significance\_score[i]/1
 
 1. 这里可以认为每个proposer都在receiver的list中，但是我在配对函数里设定了一定的阈值，彼此之间吸引力高于阈值才会配对成功。这样避免了匹配度过低的情况出现，提升了配对双方满意度。
 2. 这里允许proposer人数大于receiver的情况的出现。在这种情况下，proposer会轮番表白直至每个proposer或配对完成，或对所有receiver都表白过一遍后再退出循环
-   <img src="./figs/GS.png" style="zoom: 25%;" />
 
-<center>Gale Shaplay算法图示</center>
+<img src="./figs/GS.png" style="zoom: 25%;" />
+
+<p align="center">Gale Shaplay算法图示</p>
 
 对于同性恋，将男同/女同参与者均等分成两组（如果总数为奇数，则人数差1），然后执行上述算法。注意到GS算法是不对称的，稳定匹配是不唯一的，不同的分组方式可能影响结果，因此我采用**遗传算法**对分组方式进行进化与迭代，变异方式为染色体交叉，每次进化时随机选择一个操作数，或两组男同中交换一个元素，或两组女同交换一个元素，或上述二者均执行，然后重新配对，计算评价指标，保留更优解。在进化五十代后，算法稳定收敛，得到进化后的较优解。
 
-<img src="./figs/algo2" style="zoom: 25%;" />
+<img src="./figs/algo2.png" style="zoom: 25%;" />
 
-<center>遗传进化方法图示</center>
+<p align="center">遗传进化方法图示</p>
 
 <img src="./figs/evolution.jpg" style="zoom: 25%;" />
 
-<center>进化代数与配对得分</center>
+<p align="center">进化代数与配对得分</p>
 
 **（4）评价指标**
 
 本算法从三个角度衡量匹配策略的效果
 
-1. 匹配成功率(success rate)：匹配成功的参与者占所有参与者比例
-2. 净匹配成功率（net success rate)：匹配成功的参与者占至多匹配成功人数（剔除因男女不均衡导致一定不能配对成功的人数）的比例
-3. 优选率(nice matching rate)：若成功配对的receiver是proposer的前30%的选择，则记为此proposer为优选，优选率为优选的proposer占至多成功匹配proposer（剔除因男女不均衡导致一定不能配对成功的人数）的比例。
+**1. 匹配成功率(success rate)**：匹配成功的参与者占所有参与者比例
+**2. 净匹配成功率（net success rate)**：匹配成功的参与者占至多匹配成功人数（剔除因男女不均衡导致一定不能配对成功的人数）的比例
+**3. 优选率(nice matching rate)**：若成功配对的receiver是proposer的前30%的选择，则记为此proposer为优选，优选率为优选的proposer占至多成功匹配proposer（剔除因男女不均衡导致一定不能配对成功的人数）的比例。
 
 最后得到一个匹配的总体打分
 $pairing\_score = 0.25*success\_rate + 0.25*net\_success\_rate + 0.5*nice\_matching\_rate$
@@ -145,15 +157,17 @@ $pairing\_score = 0.25*success\_rate + 0.25*net\_success\_rate + 0.5*nice\_match
 
 #### 1.改变参与者特征分布
 
-生成如下的三组数据
-<img src="./figs/setting1" style="zoom: 25%;" />
+生成如下的三组数据：
 
-<center>实验1setting</center>
+<img src="./figs/setting1.png" style="zoom: 25%;" />
+
+<p align="center">实验1setting</p>
 
 都取hetero threshold=1, homo threshold=0.7得到结果
-<img src="./figs/participants" style="zoom: 25%;" />
 
-<center>实验1结果fltk可视化</center>
+<img src="./figs/participants.jpg" style="zoom: 25%;" />
+
+<p align="center">实验1结果fltk可视化</p>
 
 可见算法针对不同情况有良好的效果和鲁棒性。
 
@@ -161,17 +175,20 @@ $pairing\_score = 0.25*success\_rate + 0.25*net\_success\_rate + 0.5*nice\_match
 
 基于实验1中第一组数据（更符合交大—华师活动性别分布实况），进行改变阈值的分析，设定如下：
 
-<img src="./figs/setting2" style="zoom: 25%;" />
+<img src="./figs/setting2.png" style="zoom: 25%;" />
 
-<center>实验2setting</center>
+<p align="center">实验2setting</p>
 
 得到结果
 
-<img src="./figs/threshold" style="zoom: 25%;" />
+<img src="./figs/threshold.jpg" style="zoom: 25%;" />
 
-<center>实验2结果fltk可视化</center>
+<p align="center">实验2结果fltk可视化</p>
 
 取消阈值（即设为-100）的消融实验中，净配对率100%，优选率低，随着阈值的提高，配对率和净配对率降低，优选率提高，这与intuition非常吻合。
 
+### 致谢
 
-以上就是我项目2的主要内容，感谢老师和助教的耐心审阅，以及一学期以来的陪伴和教诲。祝新年快乐，万事胜意！（也祝自己2024pairing success doge)
+以上就是我项目2的主要内容，感谢交大十点物语主办活动和各位参与者、建言者给本项目的启发；感谢活动的算法负责人HZX与我的分享与探讨。
+
+感谢老师和助教的耐心审阅，以及一学期以来的陪伴和教诲。祝新年快乐，万事胜意！（也祝自己2024pairing success doge)
