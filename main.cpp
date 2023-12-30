@@ -29,7 +29,7 @@ int main() {
 
 
     // 读取JSONL文件
-    ifstream inputFile("/Users/yuan/PycharmProjects/lover_data_generation/testdata_matching.jsonl");
+    ifstream inputFile("/Users/yuan/PycharmProjects/lover_data_generation/testdata_matching3_homo_more.jsonl");
 
     if (!inputFile.is_open()) {
         cerr << "Error opening file." << endl;
@@ -329,7 +329,7 @@ int main() {
     }
     cout << endl;
 
-    int *cnt2 = pairing(participants, boy_homo1, boy_homo2, attr_matrix, 0.5);
+    int *cnt2 = pairing(participants, boy_homo1, boy_homo2, attr_matrix, 0.7);
 
 
     //女同做一样的处理
@@ -346,12 +346,13 @@ int main() {
     }
     cout << endl;
 
-    int *cnt3 = pairing(participants, girl_homo1, girl_homo2, attr_matrix, 0.5);
+    int *cnt3 = pairing(participants, girl_homo1, girl_homo2, attr_matrix, 0.7);
 
-    int generation = 100;
+    int generation = 50;
     double score;
     //evolution
     double max_score = -100;
+    double *iterating_scores = new double[50]();
     for(int gen = 0; gen<generation; gen++){
         //先保存一下四个向量的拷贝
         vector<int> prev_boy_homo1 = boy_homo1;
@@ -361,14 +362,17 @@ int main() {
 
 
         cross(boy_homo1,boy_homo2,girl_homo1,girl_homo2);
-        cnt2 = pairing(participants, boy_homo1, boy_homo2, attr_matrix, -100);
-        cnt3 = pairing(participants, girl_homo1, girl_homo2, attr_matrix, -100);
+        cnt2 = pairing(participants, boy_homo1, boy_homo2, attr_matrix, 0.7);
+        cnt3 = pairing(participants, girl_homo1, girl_homo2, attr_matrix, 0.7);
         int nice_matching_cnt = cnt1[1] + cnt2[1] + cnt3[1];
-        double nice_matching_rate = 1.00*nice_matching_cnt/(cnt1[2]+cnt2[2]+cnt3[2]);
         int paired_count = cnt1[0] + cnt2[0] + cnt3[0];
+        double nice_matching_rate = 1.00*nice_matching_cnt/paired_count;
         double paired_rate = 1.00*paired_count/overall_num;
+        double net_paired_rate = 1.00*paired_count/(2*(cnt1[2]+cnt2[2]+cnt3[2]));
+        double curr_score = 0.25*paired_rate + 0.25*net_paired_rate + 0.5*nice_matching_rate;
 
-        double curr_score = 0.5*paired_rate + 0.5*nice_matching_rate;
+//        iterating_scores[gen] = curr_score;
+
         if(curr_score <= max_score){
             boy_homo1 = prev_boy_homo1;
             boy_homo2 = prev_boy_homo2;
@@ -387,10 +391,11 @@ int main() {
             cout << "进化变优" <<endl;
 
         }
+        iterating_scores[gen] = max_score;
     }
     int nice_matching_cnt = cnt1[1] + cnt2[1] + cnt3[1];
-    double nice_matching_rate = 1.00*nice_matching_cnt/(cnt1[2]+cnt2[2]+cnt3[2]);
     int paired_count = cnt1[0] + cnt2[0] + cnt3[0];
+    double nice_matching_rate = 1.00*nice_matching_cnt/paired_count;
     double paired_rate = 1.00*paired_count/overall_num;
     double net_paired_rate = 1.00*paired_count/(2*(cnt1[2]+cnt2[2]+cnt3[2]));
     score = 0.25*paired_rate + 0.25*net_paired_rate + 0.5*nice_matching_rate;
@@ -407,10 +412,33 @@ int main() {
     cout <<"attraction中位数：" << calculateMedian(attr_matrix,400,400) << endl;
     //检查一下匹配的组合中有没有不合理的
 
+    //print iterating scores to outer file
+    ofstream outputFile("/Users/yuan/CLionProjects/jsonl_test/evolution_algorithm_output.txt");
+    if (!outputFile.is_open()) {
+        cerr << "Error opening file." << endl;
+        return 1;
+    }
+    outputFile << "{";
+    for(int i = 0;i<generation;i++){
+        outputFile << iterating_scores[i] << ", ";
+    }
+    outputFile << "}";
+    // 关闭文件
+    outputFile.close();
+    std::cout << "数据已成功写入文件。" << std::endl;
 
 
+//释放动态内存
+    for (int i = 0; i < overall_num; ++i) {
+        delete[] pairing_matrix[i];
+    }
+    delete[] pairing_matrix;
+    delete[] iterating_scores;
+    for (int i = 0; i < overall_num; ++i) {
+        delete[] attr_matrix[i];
+    }
+    delete[] attr_matrix;
 
-    //释放动态内存
     return 0;
 }
 

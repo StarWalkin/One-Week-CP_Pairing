@@ -107,34 +107,6 @@ int* pairing(vector<Participant> participants, vector<int> group1, vector<int> g
         proposer_copy.push_back(proposer[i]);
     }
 
-    //淘汰掉多余的proposer--------------------------------------------------------
-    //求出每个proposer对于receiver的吸引力的中位数
-//    vector<double> median_attr;
-//    for(int i = 0;i < proposer.size();i++){
-//        vector<double> attr;
-//        for(int j = 0;j < receiver.size();j++){
-//            attr.push_back(attr_matrix[receiver[j]][proposer[i]]);
-//        }
-//        sort(attr.begin(),attr.end());
-//        median_attr.push_back(attr[int(receiver.size()/2)]);
-//    }
-//
-//    //将proposer以median_attr从大到小排序
-//    vector<int> proposer_new;
-//    for(int i = 0;i < proposer.size();i++){
-//        proposer_new.push_back(proposer[i]);
-//    }
-//    sort(proposer_new.begin(),proposer_new.end(),[&](int a,int b){
-//        return median_attr[a] > median_attr[b];
-//    });
-//    //取前receiver.size()个proposer
-//    proposer_new.erase(proposer_new.begin()+receiver.size(),proposer_new.end());
-//
-//
-//    proposer = proposer_new;
-
-//    cout << "proposer.size(): " << proposer.size() << endl;
-//    cout << "receiver.size(): " << receiver.size() << endl;
 
     int p_size = int(proposer.size());
     int r_size = int(receiver.size());
@@ -181,26 +153,8 @@ int* pairing(vector<Participant> participants, vector<int> group1, vector<int> g
         //存储各个receiver收到的表白者列表
         //遍历proposer，将表白者加入receiver的表白者列表
         for(int idx=0; idx<proposer.size(); idx++){
-//            cout << "enter" << endl;
-            //==-1说明没有配对，于是出击
-//            cout << "proposer " << participants[proposer[idx]].paired << endl;
-//            cout <<latest_pointer[idx] << endl;
-//            cout << "是否小于r_size" << (latest_pointer[idx] < r_size) << endl;
-//            cout << ((participants[proposer[idx]].paired) == -1) << endl;
-//            cout <<(participants[proposer[idx]].paired == -1 && latest_pointer[idx] < r_size) << endl;
             if (participants[proposer[idx]].paired == -1 && latest_pointer[idx] < r_size-1){
-//                cout << "enter2" << endl;
-//                cout << "发现没有配对，准备出击" << latest_pointer[idx] << endl;
-
-
                 latest_pointer[idx] = latest_pointer[idx] + 1;
-//                if(latest_pointer[idx] >900){
-//                    //查看异常情况的发生原因
-//                    cout << "latest_pointer[idx] >900" << endl;
-//                    cout << "proposer " << proposer[idx] << endl;
-//                    cout <<  (latest_pointer[idx] < r_size) << endl;
-//                }
-
                 //向目前的最喜欢的人表白，并加入该人的表白者列表
                 int target = target_lists[idx][latest_pointer[idx]];
                 participants[target].proposers_to_select.push_back(idx);
@@ -285,9 +239,6 @@ int* pairing(vector<Participant> participants, vector<int> group1, vector<int> g
 //        cout << "proposer_copy size" << proposer_copy.size() << endl;
         for(int i=0;i<p_size;i++){
             if(participants[proposer[i]].paired == -1){
-//                cout << "proposer " << proposer_copy[i] << " has not paired" << endl;
-//                cout << "latest pinter:" << latest_pointer[i] << endl;
-//                cout << "是否小于r_size" << (int(latest_pointer[i]) < r_size) << endl;
                 pro_single++;
             }
         }
@@ -296,16 +247,7 @@ int* pairing(vector<Participant> participants, vector<int> group1, vector<int> g
                 rec_single++;
             }
         }
-//        cout << "pro_single: " << pro_single << endl;
-//        cout << "rec_single: " << rec_single << endl;
-//        //检查是否receiver都收到了表白
-//        for(int i = 0;i < receiver.size();i++) {
-//            if (participants[receiver[i]].paired == -1) {
-////                cout << "receiver " << receiver[i] << " has not received all the proposer" << endl;
-//                flag = 0;
-//                break;
-//            }
-//        }
+
         if(flag == 1){
             break;
         }

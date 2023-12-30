@@ -221,10 +221,3 @@ double characteristics_scoring(Participant p1, Participant p2){
 }
 
 
-double pairs_scoring(double **attr_matrix, int **pairing_matrix, int overall_num){
-    //计算配对成功率与优选率（选中对象是自己list里的前35%)
-    int success_count = 0;
-    int prefer_count = 0;
-
-
-}
